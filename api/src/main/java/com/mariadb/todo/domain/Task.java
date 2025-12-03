@@ -1,6 +1,7 @@
 package com.mariadb.todo.domain;
+import com.mariadb.todo.domain.Task;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 
 import lombok.Data;
 
