@@ -30,5 +30,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/todo-app-jdbc-spring-api:latest
