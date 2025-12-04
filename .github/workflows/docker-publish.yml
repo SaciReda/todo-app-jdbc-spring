@@ -7,7 +7,7 @@ on:
 
 env:
   IMAGE_NAME: todo-app-jdbc-spring-api
-  GHCR_USERNAME: sacireda   # 👈 tout en lowercase obligatoire
+  GHCR_USERNAME: sacireda
 
 jobs:
   build:
@@ -17,6 +17,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build JAR with Maven
+        run: |
+          cd api
+          mvn -B clean package
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -24,13 +35,13 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: sacireda
+          username: ${{ env.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./api
+          context: .
           file: ./api/Dockerfile
           push: true
           tags: ghcr.io/sacireda/todo-app-jdbc-spring-api:latest
